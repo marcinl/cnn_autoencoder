@@ -12,16 +12,24 @@ def save_checkpoint(
     epoch: int,
     loss: float,
     path: str | Path,
+    extra: Optional[dict] = None,
 ) -> None:
-    torch.save(
-        {
-            "epoch": epoch,
-            "model_state": model.state_dict(),
-            "optimizer_state": optimizer.state_dict(),
-            "loss": loss,
-        },
-        path,
-    )
+    """
+    Args:
+        extra: Merged into the checkpoint. Use it to persist `class_names` and
+            the model config — a state_dict alone does not record which label
+            index means "toys", and reconstructing that by hand later is how
+            checkpoints silently start mispredicting.
+    """
+    payload = {
+        "epoch": epoch,
+        "model_state": model.state_dict(),
+        "optimizer_state": optimizer.state_dict(),
+        "loss": loss,
+    }
+    if extra:
+        payload.update(extra)
+    torch.save(payload, path)
 
 
 def load_checkpoint(

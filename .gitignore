@@ -1,2 +1,13 @@
+.DS_Store
 bin/*
 lib/*
+share/
+
+# Python build artifacts
+__pycache__/
+*.pyc
+
+# Large external data (not tracked in git)
+Google-Universal_Image_Embeddings.zip
+128x128/*.jpg
+128x128/*.JPG
