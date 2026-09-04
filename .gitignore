@@ -9,8 +9,8 @@ __pycache__/
 
 # Large external data (not tracked in git)
 Google-Universal_Image_Embeddings.zip
-128x128/*.jpg
-128x128/*.JPG
+128x128/**/*.jpg
+128x128/**/*.JPG
 
 # Local-only notes
 README_private
