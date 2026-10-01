@@ -58,7 +58,7 @@ def reconstruct_grid(
     """
     model.eval()
     with torch.no_grad():
-        recon, _ = model(images.to(device))
+        recon = model(images.to(device))[0]
     recon = recon.cpu()
 
     pairs = torch.cat([images, recon], dim=3)   # stack width-wise per image

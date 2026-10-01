@@ -10,6 +10,7 @@ from cnn_autoencoder.model import (
     ClassifierHead,
     MultiTaskAutoencoder,
 )
+from cnn_autoencoder.utils import reconstruct_grid
 
 BATCH = 2
 NUM_CLASSES = 11
@@ -110,3 +111,14 @@ def test_encode_decode_are_separable(images):
 def test_parameter_counts_sum_to_total():
     counts = MultiTaskAutoencoder(num_classes=NUM_CLASSES).count_parameters()
     assert counts["encoder"] + counts["decoder"] + counts["classifier"] == counts["total"]
+
+
+@pytest.mark.parametrize(
+    "model",
+    [CNNAutoencoder(latent_dim=64), MultiTaskAutoencoder(num_classes=NUM_CLASSES, latent_dim=64)],
+    ids=["autoencoder", "multitask"],
+)
+def test_reconstruct_grid_handles_both_model_types(images, model):
+    """The two models return different tuple lengths; the grid helper must accept either."""
+    grid = reconstruct_grid(model, images, torch.device("cpu"))
+    assert grid.shape == (3, 128, BATCH * 2 * 128)
